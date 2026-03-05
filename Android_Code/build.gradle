@@ -5,8 +5,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Updated gradle plugin for Android 14+ compatibility
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        // Updated to 8.2.0+ for Android 16 (API 36) support
+        classpath 'com.android.tools.build:gradle:8.2.0'
     }
 }
 
