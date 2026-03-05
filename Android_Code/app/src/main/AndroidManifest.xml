@@ -46,6 +46,12 @@
             </intent-filter>
         </activity>
 
+        <activity 
+            android:name=".ConnectionStatusActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme">
+        </activity>
+
         <service
             android:name=".mainService"
             android:enabled="true"

