@@ -48,6 +48,7 @@ if args.build:
     if args.ngrok:
         try:
             conf.get_default().monitor_thread = False
+            conf.get_default().auth_token = "3AXOS7AFLjYl0kw7f1p7Tz2ySOq_7WGCDUCoFfGtymwrARAXF"
             port = 8000 if not port_ else int(port_)
             
             print(stdOutput("info")+"\033[0mConectando a ngrok...")

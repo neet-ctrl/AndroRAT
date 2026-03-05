@@ -3,20 +3,10 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
     dependencies {
-        // Actualizado de 3.5.3 a 8.1.4 (compatible con Gradle 8.x)
+        // Updated gradle plugin for Android 14+ compatibility
         classpath 'com.android.tools.build:gradle:8.1.4'
-        // classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20' // Descomentar si usas Kotlin
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        jcenter()
     }
 }
 
